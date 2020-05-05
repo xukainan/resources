@@ -1,0 +1,286 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>用户登录 - 爱觅优 - 生活更精彩</title>
+<link href="css/user-info.css" rel="stylesheet" type="text/css" media="all" />
+<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="js/profile.js"></script>
+<script type="text/javascript" src="js/inp-eml.js"></script>
+<script type="text/javascript" src="js/jquery.jqtransform.js"></script>
+<head>
+
+<body>
+<div class="head_s">
+	<div class="head_s_wrap">
+	<a href="#" class="logo"></a>
+	</div>
+</div>
+<div class="loginPanel_con">
+<div class="loginPanel_left" style="padding-top:45px; width:260px;">
+<div class="qq-avatar"><img alt="头像"  src="http://qzapp.qlogo.cn/qzapp/100461018/4802E4A61BA4626D1D9A3AFFA0758C98/50" data-pinit="registered"></div>
+<p class="qq-info">来自QQ的<strong>脚本8</strong></p>
+</div>
+<div class="loginPanel_right" style="border-left:1px solid #EEEEEE; border-right:0px; width:700px;">
+<h3>完善账户信息</h3>
+<div class="loginPanle_error02" id="errorinfo" ></div>
+<form  id="profileform" name="profileform" class="jqtransform" action="http://u.tangdou.com/user/bound_tc" method="post">
+<input type="hidden" name="submit_hash" value="a73c1640" />
+<div class="rowElem">
+<label>用户名：</label>
+<input type="text" name="username" id="username" />
+<p class="UserNameError">创建后不可修改</p>
+</div>
+<div class="rowElem">
+<label>性别：</label>
+<input type="radio" name="gender" value="M" id="s1" /><label class="radiovalue" for="s1">男</label>
+<input type="radio" name="gender" value="F" id="s2" /><label class="radiovalue" for="s2">女</label>
+</div>
+<div class="rowElem">
+<label>生日：</label>
+<select id="year" name="year" class="year_sele">
+<option value="">年</option>
+</select>
+<select id="month" name="month" class="year_sele">
+<option value="">月</option>
+</select>
+<select id="day" name="day" class="year_sele">
+<option value="">日</option>
+</select>
+</div>
+<div class="rowElem">
+<label>地区：</label>
+<select name="province" id="province" onChange = "select()" class="year_sele">
+<option value="">省</option>
+</select>
+<select name="city" id="city" onChange = "select()" class="year_sele">
+<option value="">城市</option>
+</select>
+</div>
+<div class="rowElem">
+<label>QQ：</label>
+<input name="qq" id="qq" type="text" />
+</div>
+<div class="rowElem">
+<label>Email：</label>
+<input name="email" id="email" type="text" />
+</div>
+<div class="rowElem">
+<label>密码：</label>
+<input name="password" id="password" type="password" />
+</div>
+<div class="rowElem">
+<label>确认密码：</label>
+<input name="confirm_password" id="confirm_password" type="password" />
+</div>
+<div class="loginPanel_btn">   
+<input type="hidden" name="loginsubmit" value="loginsubmit" />                	
+<input class="loginbtn" id="submit" name="submit" value="登录" type="submit">
+</div>
+</form>
+</div>
+<script type="text/javascript">
+	$("#customTest").mailAutoComplete({
+		boxClass: "out_box", //外部box样式
+		listClass: "list_box", //默认的列表样式
+		focusClass: "focus_box", //列表选样式中
+		markCalss: "mark_box", //高亮样式
+		autoClass: false,
+		textHint: true, //提示文字自动隐藏
+		hintText: "请输入邮箱"
+	});
+	//检查匹配用户名与密码
+	function checkMatch(username, password, secc, error) {
+		var bol;
+		$.ajax({
+			type: 'POST',
+			async: false,
+			data: 'isajax=1&username='+username+'&password='+password,
+			url: base_dir+'index.php/ajax/check_username_password',
+			success: function(data){
+				if(data == 0) {
+					bol = false;
+				} else {
+					bol = true;
+				}
+			}
+		});
+		return bol;
+	}
+	//检查邮箱
+	function checkEmail(email) {
+		var bol;
+		$.ajax({
+			type: 'get',
+			async: false,
+			data: 'isajax=1&email='+email,
+			url: base_dir+'index.php/ajax/check_email_openid',
+			success: function(data){
+				bol = data;
+			}
+		});
+		return bol;
+	}
+	//检查昵称
+	function checkUsername(username) {
+		var bol;
+		$.ajax({
+			type: 'get',
+			async: false,
+			data: 'isajax=1&username='+encodeURIComponent(username),
+			url: base_dir+'index.php/ajax/check_username',
+			success: function(data){
+				if(data == 0) {
+					bol = true;
+				}else if (data == 1) {
+					bol = 2;
+				}else if (data == -1){
+					bol = true;
+				}
+			}
+		});
+		return bol;
+	}
+	function getByteLen(str) {
+	    var len = 0;
+	    for (var i=0; i < str.length; i++) {
+			if (str.substr(i,1).match(/[^\x00-\xff]/ig) != null) {//全角
+	            len += 2;
+	        } else {
+	            len += 1;
+	        }
+	    }
+	    return len;
+	}
+
+	$(document).ready(function(){
+		//年
+		var year = '<option value="">年</option>';
+		for(var i=1933; i<=2013; i++) {
+			year += '<option value="'+i+'">'+i+'</option>';
+		}
+		$('#year').html(year);
+		//月
+		var month = '<option value="">月</option>';;
+		for(var i=1; i<=12; i++) {
+			month += '<option value="'+i+'">'+i+'</option>';
+		}
+		$('#month').html(month);
+		//日
+		var day = '<option value="">日</option>';
+		for(var i=1; i<=31; i++) {
+			day += '<option value="'+i+'">'+i+'</option>';
+		}
+		$('#day').html(day);
+		
+		//省份
+		init_tc();	
+		//jquery模拟
+		$('form').jqTransform({ imgPath: 'jqtransformplugin/img/' });
+
+		//输入qq号，自动填写QQ邮箱
+		$('#qq').change(function(){
+			if($('#email').val() == '') {
+				$('#email').val($('#qq').val()+'@qq.com');
+			}
+		});
+
+		$("#profileform").submit(function(){
+			var username = $('input[name=username]').val();
+			var email = $('input[name=email]').val();
+			var password = $('input[name=password]').val();
+			var confirm_password = $('input[name=confirm_password]').val();
+
+			var fv_len = getByteLen(username);
+			if(/^[a-zA-Z0-9\u4E00-\u9FA5_-]+$/.test(username) && fv_len > 3 && fv_len <15 ) {
+				if(checkUsername(username) == false) {
+					$('#errorinfo').addClass('name_error').show().html('昵称不超过7个汉字或14个英文,数字、_和-');
+					return false;
+				} else if(checkUsername(username) == 2) {
+					$('#errorinfo').removeClass('name_error').show().html('该昵称已被别人抢注');
+					return false;
+				}
+			} else {
+				$('#errorinfo').addClass('name_error').show().html('昵称不超过7个汉字或14个英文,数字、_和-');
+				return false;
+			}
+
+			var gender=false;
+			for(var i=0;i<profileform.gender.length;i++) {
+			    if(profileform.gender[i].checked) {
+			    	gender=true;
+			    }
+			}
+			if (gender == false) {
+				$('#errorinfo').removeClass('name_error').show().html('请选择性别');
+				return false;
+			}
+
+			if($('#day').val() == '日' || $('#day').val()=='') {
+				$('#errorinfo').removeClass('name_error').show().html('请选择生日');
+				return false;
+			}
+			if($('#province').val() == '省份') {
+				$('#errorinfo').removeClass('name_error').show().html('请选择地区');
+				return false;
+			}
+			if($('#qq').val() == '') {
+				$('#errorinfo').removeClass('name_error').show().html('QQ不能为空');
+				$('#qq').focus();
+				return false;
+			}
+			if($('#email').val() == '') {
+				$('#errorinfo').removeClass('name_error').show().html('email不能为空');
+				$('#email').focus();
+				return false;
+			}
+			if(/^([.a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/.test(email)) {
+				if(!/^.{6,18}$/.test(password)) {
+					$('#errorinfo').removeClass('name_error').show().html('密码为6-18位');
+					return false;
+				}
+				if(password != confirm_password) {
+					$('#errorinfo').removeClass('name_error').show().html('两次输入的密码不一致');
+					$('input[name="confirm_password"]').val('');
+					return false;
+				}
+				var bol = checkEmail(email);
+				if(bol == 1) {
+					if(checkMatch($('input[name=email]').val(), $('input[name=password]').val()) == false) {
+						//$('#errorinfo').show().html('邮箱和密码不匹配');
+						$('#errorinfo').removeClass('name_error').show().html('该邮箱已注册');
+						$('input[name="password"]').val('');
+						$('input[name="confirm_password"]').val('');
+						return false;
+					}
+				} else if(bol == -1) {
+					$('#errorinfo').removeClass('name_error').show().html('该邮箱已注册');
+					return false;
+				} 
+			} else {
+				$('#errorinfo').removeClass('name_error').show().html('请输入正确的电子邮箱');
+				$('input[name="email"]').focus();
+				return false;
+			}
+			
+		});
+	    /*
+	    //控制父窗口中iframe的定位
+		var par = $('#loginPanel', window.parent.document);
+		var par_iframe = $('#main', window.parent.document);
+		var parbody = $('body', window.parent.document);
+
+	  	par.css({
+			left:(parbody.width()-par.width())/2+"px",
+			top:($(window.parent).height()-par.height())/2-$(window.parent).scrollTop()+"px",
+			width:635+'px',
+			height:410+'px',
+			display:"block"
+		});
+	  	par_iframe.css({height:410+'px'});
+	  	*/
+	  })
+	
+</script>
+</body>
+</html>

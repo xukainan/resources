@@ -1,0 +1,12 @@
+index.html:首页
+message.html:信息管理
+recharge.html:充值消费
+per.html:个人中心
+consumption.html：消费记录
+message_collect.html：信息管理-我的收藏
+message_comment.html：信息管理-我的评论
+message_write.html：信息管理-写信息
+per_bindset.html：账号绑定
+per_detailed.html：详细资料
+recharge_gold.html：充值金币
+recharge_record.html：充值记录

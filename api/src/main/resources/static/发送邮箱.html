@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>邮箱发送 -爱觅优 - 生活更精彩</title>
+<link href="css/user-info.css" rel="stylesheet" type="text/css" media="all" />
+<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript">
+	var base_url = 'http://u.tangdou.com/';
+	var site_url = 'http://u.tangdou.com/';
+	var front_url = 'http://u.tangdou.com/';
+	var base_dir = '/';
+</script>
+</head>
+<body>
+<div class="head_s">
+	<div class="head_s_wrap">
+	<a href="#" class="logo"></a>
+	</div>
+</div>
+<div class="resetreq">
+<div class="resetreq_con">
+<h2>找回密码</h2>
+<div class="step">
+<span class="step_icon1 ">1</span>
+<span class="step_icon2 on2">2</span>
+<span class="step_icon3 ">3</span></div>
+<div class="step_one">
+<p class="check_email">已发送验证邮件至：<em>103*******@qq.com</em>，部分邮箱接收邮件比较慢，请稍后进入邮箱验证。</p>
+<span class="text">验证邮件24小时内有效，请尽快登录您的邮箱点击激活链接完成验证。</span>
+<div class="loginPanel_btn">   
+<input type="hidden" name="loginsubmit" value="loginsubmit">                	
+<button id="submit" name="submit" type="submit" class="check_email_btn jqTransformButton"><span><span>进入邮箱</span></span></button>
+</div>
+</div>
+</div>
+<script type="text/javascript">
+$(function(){
+	$("#submit").click(function(e) {
+		if ($('input[name=username]').val() != undefined){
+			if(/^[^ ]{4}$/.test($('#validate_code').val())){
+				if(checkValidate($('#validate_code').val()) == false) {
+					$('<div class="error">请输入正确的验证码</div>').prependTo(".step_one").delay(1500).fadeOut(500);
+					return false;
+				}
+			} else if($('#validate_code').val().length !=4) {
+				$('<div class="error">请输入正确的验证码</div>').prependTo(".step_one").delay(1500).fadeOut(500);
+				return false;
+			}
+			if ($('input[name=username]').val() == ''){
+				$('<div class="error">请输入用户名</div>').prependTo(".step_one").delay(1500).fadeOut(500);
+				return false;
+			} else{
+				$("#f").submit();
+			}
+		} else {
+        	$("#f").submit();
+		}
+    });
+
+	$('#validate_code').keydown(function(e){
+		 if(e.keyCode==13){
+			 $("#submit").click(); //处理事件
+			 return false;
+		 }
+	 });
+});
+function checkValidate(validate_code) {
+	var bol;
+	$.ajax({
+		type: 'get',
+		async: false,
+		data: 'isajax=1&validate_code='+validate_code,
+		url: base_dir+'index.php/ajax/check_validate_code',
+		success: function(data){
+			if(data == 0) {
+				bol = false;
+			} else {
+				bol = true;
+			}
+		}
+	});
+	return bol;
+}
+
+</script>
+<div class="lost_pwd">
+<div id="footer" class="wrap area">
+<p class="about"> 
+<a class="home" href="http://www.tangdou.com" rel="nofollow">首页</a> - <a target="_blank" href="http://www.52miui.com" rel="nofollow">关于我们</a> - <a target="_blank" href="http://www.52miui.com" rel="nofollow">联系我们</a> - <a target="_blank" href="www.52miui.com">友情链接</a> - <a target="_blank" href="www.52miui.com" rel="nofollow">版权维护</a> - <a target="_blank" href="www.52miui.com" rel="nofollow">网站地图</a>
+<br><span>Copyright ©2005-2011 爱觅优(www.52miui.com)版权所有</span>
+</p>
+<p>电信业务审批[2007]字第265号| 高新技术企业认定 |公安局网站备案编号：XXXXXXXXX|<a target="_blank" href="http://www.52miui.com" rel="nofollow">京ICP备07004369号-9</a>|<a href="http://www.52miui.com" target="_blank" rel="nofollow">网络许视听可证0110537号</a>|京ICP证070427号 <a target="_blank" href="http://www.52miui.com" rel="nofollow"><img alt="" src="http://images.tangdou.com/images/biaoshi.gif"></a> </p>
+</div>
+</div>
+</div>
+</body>
+</html>
