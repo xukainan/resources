@@ -33,6 +33,7 @@
         <module>tools</module>
         <module>admin_api</module>
         <module>service</module>
+        <module>dao</module>
     </modules>
 
     <dependencies>
