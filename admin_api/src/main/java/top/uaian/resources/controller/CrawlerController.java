@@ -14,6 +14,7 @@ public class CrawlerController {
 
     @RequestMapping("/start")
     public String start(){
+        logger.info("爬虫开始运行！");
         return "爬虫开始运行！";
     }
 }

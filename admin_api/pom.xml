@@ -33,6 +33,17 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <!-- logback这个依赖必须存在，否则会报java.lang.ClassNotFoundException: org.apache.commons.dbcp.BasicDataSource-->
+        <dependency>
+            <groupId>commons-dbcp</groupId>
+            <artifactId>commons-dbcp</artifactId>
+            <version>1.4</version>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <scope>runtime</scope>
+        </dependency>
         <!--其它模块-->
         <dependency>
             <groupId>top.uaian</groupId>
