@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
  * @author: xukainan <br>
  * version: 1.0 <br>
  */
+
 public class DataSourceContextHolder {
 
     private static Logger logger = LoggerFactory.getLogger(DataSourceContextHolder.class);
@@ -20,8 +21,7 @@ public class DataSourceContextHolder {
     /**
      * 默认数据源
      */
-    @Value("${dbconfig.defaultDataName}")
-    private static String defaultDbSource = "";
+    private static String defaultDbSource = "db-w";
 
     static String dbType;
 

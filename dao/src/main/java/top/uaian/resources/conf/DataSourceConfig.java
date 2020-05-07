@@ -72,7 +72,7 @@ public class DataSourceConfig {
                 new TypeReference<Map<String, DbItem>>(){}.getType());
     }
 
-    @Bean("dataSource")
+    @Bean
     @Primary
     DynamicDataSource dataSource() throws Exception {
         DynamicDataSource dynamicDataSource = new DynamicDataSource();
@@ -82,7 +82,7 @@ public class DataSourceConfig {
             try {
                 DataSource dataSource = buildDataSource(sqlDriverItemMaps.get(sqlDriverItemMap_key));
                 targetDataSource.put(sqlDriverItemMap_key, dataSource);
-                if(sqlDriverItemMap_key == defaultDataName) {
+                if(sqlDriverItemMap_key.equals(defaultDataName)) {
                     dynamicDataSource.setDefaultTargetDataSource(dataSource);
                 }
             } catch (Exception e) {

@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import javax.sql.DataSource;
 
 @EnableTransactionManagement
-@MapperScan("top.uaian.mybatisplus.dao")
+@MapperScan("top.uaian.resources.dao")
 @Configuration
 public class MybatisPlusConfig {
 
@@ -35,5 +35,9 @@ public class MybatisPlusConfig {
         mybatisSqlSessionFactoryBean.setConfiguration(mybatisConfiguration);
         return mybatisSqlSessionFactoryBean.getObject();
     }
+
+    /**
+     * mybatis-plus sql语句打印https://mp.baomidou.com/guide/p6spy.html
+     */
 
 }

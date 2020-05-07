@@ -33,20 +33,19 @@ public class CrawlerServiceImpl implements CrawlerService {
 
     private void CrawlerJava1234Start() {
         WebClient webClient = WebClientUtils.getWebClient();
-        ArrayList topHrefs = CrawlerJava1234Index(webClient);
+        ArrayList topHrefs = CrawlerIndex(webClient);
         if(!Optional.ofNullable(topHrefs).isPresent() || topHrefs.size() <=0) {
             return;
         }
 
     }
 
-    private ArrayList CrawlerJava1234Index(WebClient webClient){
+    private ArrayList CrawlerIndex(WebClient webClient){
         try {
             ArrayList topUrls = new ArrayList();
             HtmlPage indexPage = webClient.getPage(Java1234_Url);
             //主页导航栏<a>标签
             Elements topEles = JsoupUtils.getElements(indexPage.asXml(), "div.top li > a[rel]");
-            //todo 换成表存储
             Elements kaiyuans = topEles.select(":contains(Java开源项目分享)");
             Elements bysjs = topEles.select(":contains(Java毕业设计)");
             if(kaiyuans.addAll(bysjs)) {

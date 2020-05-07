@@ -27,7 +27,8 @@ public class DataSourceAspect {
     @Pointcut("execution(* top.uaian.resources.dao.*Mapper.sel*(..))" +
                 "|| execution(* top.uaian.resources.dao.*Mapper.count*(..))" +
             "|| execution(* top.uaian.resources.dao.*Mapper.find*(..))" +
-            "|| execution(* top.uaian.resources.dao.*Mapper.get*(..))")
+            "|| execution(* top.uaian.resources.dao.*Mapper.get*(..))" +
+            "|| execution(* top.uaian.resources.dao.*Mapper.list*(..))")
     private void db_read(){}
 
     @Before("db_read()")
