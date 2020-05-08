@@ -27,10 +27,7 @@ public class CrawlerWebsiteController {
     @GetMapping("/list")
     public JsonResult list(){
         JsonResult jsonResult = new JsonResult();
-        QueryWrapper<CrawlerWebsite> wrapper = new QueryWrapper<CrawlerWebsite>();
-        wrapper.ne("is_del", "1");
-        wrapper.ne("is_stop", "1");
-        List<CrawlerWebsite> list = crawlerWebsiteService.list(wrapper);
+        List<CrawlerWebsite> list = crawlerWebsiteService.list();
         if(list != null && list.size() > 0) {
             return jsonResult.renderSuccess("查询成功！", "200", list);
         }

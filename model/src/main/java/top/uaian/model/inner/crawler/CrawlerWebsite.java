@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
@@ -28,9 +29,12 @@ public class CrawlerWebsite {
     //mybatis不能用下划线 http://localhost:8090/admin/crawler/website/list
     public String webFlag;
     public String webName;
-    public String webUrl;
+    public String webConf;
     public Integer isDel;
-    public Integer isStop;
     //@TableField(exist = false)
-    public String crawlerNav;
+    public Integer isStop;
+
+
+
+
 }

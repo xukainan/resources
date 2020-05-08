@@ -1,6 +1,7 @@
 package top.uaian.resources.service.admin;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,10 +18,10 @@ import java.util.List;
  */
 @Service
 public class CrawlerWebsiteServiceImpl extends ServiceImpl<CrawlerWebsiteMapper, CrawlerWebsite> implements CrawlerWebsiteService{
-
     @Override
-    public List<CrawlerWebsite> list(Wrapper<CrawlerWebsite> queryWrapper) {
-        return super.list(queryWrapper);
+    public List<CrawlerWebsite> list(Wrapper<CrawlerWebsite> wrapper) {
+        return super.list(new QueryWrapper<CrawlerWebsite>().lambda()
+                .ne(CrawlerWebsite ::getIsDel, "1")
+                .ne(CrawlerWebsite ::getIsStop, "1"));
     }
-
 }

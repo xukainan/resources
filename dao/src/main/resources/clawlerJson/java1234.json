@@ -1,0 +1,31 @@
+{
+  "Index":"http://www.java1234.com/",
+  "Nav" : {
+    "page":"index",
+    "isNav":"true",
+    "Ext":"Java开源项目分享,Java毕业设计",
+    "NavLabel":"div.top li > a[rel]",
+    "NavArrtibute":"href"
+  },
+  "More" : {
+    "page":"Index,Nav",
+    "isMore":"true",
+    "Ext":"",
+    "MoreLabel":"span.more a",
+    "MoreArrtibute":"href"
+  },
+  "List" : {
+    "page":"Index,Nav,More",
+    "isList":"true",
+    "Ext":"",
+    "ListLabel":"div.listbox a.title",
+    "ListArrtibute":"href"
+  },
+  "ByPage" : {
+    "page":"Index,List",
+    "isPage":"true",
+    "Ext":"下一页",
+    "PageLabel":"div.dede_pages a",
+    "PageArrtibute":"href"
+  }
+}

@@ -1,5 +1,6 @@
 package top.uaian.resources.service.admin;
 
+import com.alibaba.fastjson.JSONObject;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import org.jsoup.Jsoup;
@@ -9,12 +10,15 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import top.uaian.model.inner.crawler.CrawlerWebsite;
 import top.uaian.resources.tools.crawler.JsoupUtils;
 import top.uaian.resources.tools.crawler.WebClientUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -22,43 +26,49 @@ public class CrawlerServiceImpl implements CrawlerService {
 
     Logger logger = LoggerFactory.getLogger(CrawlerServiceImpl.class);
 
-    private final String Java1234_Url = "http://www.java1234.com/";
+    @Autowired
+    CrawlerWebsiteService crawlerWebsiteService;
 
 
     @Override
     public String CrawlerStart() {
-        CrawlerJava1234Start();
+        List<CrawlerWebsite> CrawlerWebsites = crawlerWebsiteService.list();
+        WebClient webClient = WebClientUtils.getWebClient();
+        CrawlerWebsites.stream().forEach(crawlerWebsite -> {
+            JSONObject webConf = JSONObject.parseObject(crawlerWebsite.getWebConf());
+            Crawler(webClient, webConf);
+        });
+
         return null;
     }
 
-    private void CrawlerJava1234Start() {
-        WebClient webClient = WebClientUtils.getWebClient();
-        ArrayList topHrefs = CrawlerIndex(webClient);
-        if(!Optional.ofNullable(topHrefs).isPresent() || topHrefs.size() <=0) {
-            return;
-        }
 
-    }
 
-    private ArrayList CrawlerIndex(WebClient webClient){
+    private void Crawler(WebClient webClient,JSONObject webConf){
         try {
-            ArrayList topUrls = new ArrayList();
-            HtmlPage indexPage = webClient.getPage(Java1234_Url);
+            HtmlPage indexPage = webClient.getPage(webConf.getString("Index"));
             //主页导航栏<a>标签
-            Elements topEles = JsoupUtils.getElements(indexPage.asXml(), "div.top li > a[rel]");
-            Elements kaiyuans = topEles.select(":contains(Java开源项目分享)");
-            Elements bysjs = topEles.select(":contains(Java毕业设计)");
-            if(kaiyuans.addAll(bysjs)) {
-                kaiyuans.stream().forEach(kaiyuan -> {
-                    topUrls.add(JsoupUtils.getElementAttributes(kaiyuan, "href"));
+            JSONObject navJson = JSONObject.parseObject((String) webConf.get("Nav"));
+            if("true".equals(navJson.getString("isNav"))) {
+                Elements topEles = JsoupUtils.getElements(indexPage.asXml(), navJson.getString("NavLabel"));
+                String[] exts = navJson.getString("Ext").split(",");
+                Elements navElements = new Elements();
+                for (int i = 0; i < exts.length; i++) {
+                    navElements.addAll(topEles.select(":contains(Java开源项目分享)"));
+                }
+                navElements.stream().forEach(nav -> {
+                    String topHref = webConf.getString("Index") + JsoupUtils.getElementAttributes(nav, navJson.getString("NavArrtibute"));
+                    try {
+                        HtmlPage topPage = webClient.getPage(topHref);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 });
             }
-            return topUrls;
         }catch (IOException io) {
             //todo 增加批次号
             logger.info("爬取Java1234主页失败: " + io.getMessage());
         }
-        return null;
     }
 
 
@@ -91,8 +101,8 @@ public class CrawlerServiceImpl implements CrawlerService {
                     //获取下一页
                     boolean isNextExist = true;
                     while (isNextExist) {
-                        Elements byPageEles = moreDoc.select("div.dede_pages a");
-                        Elements nextpageEle = byPageEles.select(":contains(下一页)");
+                        Elements nextpageEle = moreDoc.select("div.dede_pages a :contains(下一页)" );
+//                        Elements nextpageEle = byPageEles.select(":contains(下一页)");
                         if(nextpageEle != null && nextpageEle.size() == 1) {
                             String nextPageHref = nextpageEle.first().attributes().get("href");
                             String nextUrl = moreUrl + nextPageHref;
