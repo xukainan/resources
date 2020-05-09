@@ -22,4 +22,9 @@ public class JsoupUtils {
         Attributes attributes = element.attributes();
         return attributes.get(attributeName);
     }
+
+    public static String getElementText(Element element){
+        String text = element.text();
+        return text;
+    }
 }

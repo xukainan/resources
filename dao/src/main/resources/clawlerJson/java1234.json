@@ -1,31 +1,97 @@
 {
-  "Index":"http://www.java1234.com/",
+  "Index": {
+    "url": "http://www.java1234.com",
+    "text": "",
+    "child": [{
+      "childName": "Nav",
+      "childpage": "Index,Nav"
+    }]
+  },
   "Nav" : {
-    "page":"index",
-    "isNav":"true",
     "Ext":"Java开源项目分享,Java毕业设计",
-    "NavLabel":"div.top li > a[rel]",
-    "NavArrtibute":"href"
+    "Label":"div.top li > a[rel]",
+    "Arrtibute":"href",
+    "text": "",
+    "url": "",
+    "child": [{
+      "childName": "More",
+      "childpage": "Index,More"
+    }]
   },
   "More" : {
-    "page":"Index,Nav",
-    "isMore":"true",
     "Ext":"",
-    "MoreLabel":"span.more a",
-    "MoreArrtibute":"href"
+    "Label":"span.more a",
+    "Arrtibute":"href",
+    "text": "",
+    "url": "",
+    "child": [{
+      "childName": "List",
+      "childpage": "Index,List"
+    },{
+      "childName": "ByPage",
+      "childpage": "Index,More,ByPage"
+    }]
   },
   "List" : {
-    "page":"Index,Nav,More",
-    "isList":"true",
     "Ext":"",
-    "ListLabel":"div.listbox a.title",
-    "ListArrtibute":"href"
+    "Label":"div.listbox a.title",
+    "Arrtibute":"href",
+    "text": "",
+    "url": "",
+    "child": [{
+      "childName": "Title",
+      "childpage": ""
+    },{
+      "childName": "Link",
+      "childpage": ""
+    },{
+      "childName": "LinkPw",
+      "childpage": ""
+    },{
+      "childName": "Image",
+      "childpage": ""
+    }]
   },
   "ByPage" : {
-    "page":"Index,List",
-    "isPage":"true",
     "Ext":"下一页",
-    "PageLabel":"div.dede_pages a",
-    "PageArrtibute":"href"
+    "Label":"div.dede_pages a",
+    "Arrtibute":"href",
+    "url": "",
+    "text": "",
+    "child": [{
+      "childName": "List",
+      "childpage": "Index,List"
+    },{
+      "childName": "ByPage",
+      "childpage": "Index,More,ByPage"
+    }]
+  },
+  "Title": {
+    "Ext":"",
+    "Label":"div.title h2",
+    "Arrtibute":"",
+    "url": "",
+    "text": "true"
+  },
+  "Link": {
+    "Ext":"",
+    "Label":"strong a",
+    "Arrtibute":"",
+    "url": "",
+    "text": "true"
+  },
+  "LinkPw": {
+    "Ext":"",
+    "Label":"strong span",
+    "Arrtibute":"",
+    "url": "",
+    "text": "true"
+  },
+  "Image": {
+    "Ext":"",
+    "Label":"div.content img",
+    "Arrtibute":"src",
+    "url": "",
+    "text": "true"
   }
 }
