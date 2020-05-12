@@ -2,6 +2,7 @@
   "Index": {
     "url": "http://www.java1234.com",
     "text": "",
+    "isProperty": "false",
     "child": [{
       "childName": "Nav",
       "childpage": "Index,Nav"
@@ -11,6 +12,7 @@
     "Ext":"Java开源项目分享,Java毕业设计",
     "Label":"div.top li > a[rel]",
     "Arrtibute":"href",
+    "isProperty": "false",
     "text": "",
     "url": "",
     "child": [{
@@ -22,6 +24,7 @@
     "Ext":"",
     "Label":"span.more a",
     "Arrtibute":"href",
+    "isProperty": "false",
     "text": "",
     "url": "",
     "child": [{
@@ -34,6 +37,7 @@
   },
   "List" : {
     "Ext":"",
+    "isProperty": "false",
     "Label":"div.listbox a.title",
     "Arrtibute":"href",
     "text": "",
@@ -55,6 +59,7 @@
   "ByPage" : {
     "Ext":"下一页",
     "Label":"div.dede_pages a",
+    "isProperty": "false",
     "Arrtibute":"href",
     "url": "",
     "text": "",
@@ -69,6 +74,7 @@
   "Title": {
     "Ext":"",
     "Label":"div.title h2",
+    "isProperty": "true",
     "Arrtibute":"",
     "url": "",
     "text": "true"
@@ -76,6 +82,7 @@
   "Link": {
     "Ext":"",
     "Label":"strong a",
+    "isProperty": "true",
     "Arrtibute":"",
     "url": "",
     "text": "true"
@@ -83,6 +90,7 @@
   "LinkPw": {
     "Ext":"",
     "Label":"strong span",
+    "isProperty": "true",
     "Arrtibute":"",
     "url": "",
     "text": "true"
@@ -90,8 +98,9 @@
   "Image": {
     "Ext":"",
     "Label":"div.content img",
+    "isProperty": "true",
     "Arrtibute":"src",
     "url": "",
-    "text": "true"
+    "text": ""
   }
 }

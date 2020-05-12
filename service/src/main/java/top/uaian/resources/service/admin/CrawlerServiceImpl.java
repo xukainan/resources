@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import top.uaian.model.inner.crawler.CrawlerWebsite;
+import top.uaian.model.inner.crawler.Resource;
+import top.uaian.model.inner.crawler.ResourceExtend;
 import top.uaian.resources.tools.crawler.JsoupUtils;
 import top.uaian.resources.tools.crawler.WebClientUtils;
 
@@ -23,6 +25,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
+import java.util.logging.Level;
 
 @Service
 public class CrawlerServiceImpl implements CrawlerService {
@@ -35,21 +38,29 @@ public class CrawlerServiceImpl implements CrawlerService {
 
     @Override
     public String CrawlerStart() {
+        java.util.logging.Logger.getLogger("org.apache.http.client").setLevel(Level.OFF);
         List<CrawlerWebsite> CrawlerWebsites = crawlerWebsiteService.list();
         WebClient webClient = WebClientUtils.getWebClient();
         CrawlerWebsites.stream().forEach(crawlerWebsite -> {
+            Resource resource = new Resource();
+            resource.setCode(UUID.randomUUID().toString());
+            ResourceExtend resourceExtend = new ResourceExtend();
+            resourceExtend.setResOrigin(crawlerWebsite.getId());
+            resourceExtend.setResCode(UUID.randomUUID().toString());
             JSONObject webConf = JSONObject.parseObject(crawlerWebsite.getWebConf());
             JSONObject indexJson = JSONObject.parseObject(webConf.getString("Index"));
             Map<String,String> pages = new HashMap<>();
             pages.put("Index", indexJson.getString("url"));
-            Crawler(webClient, webConf, indexJson, pages);
+            Crawler(webClient, webConf, indexJson, pages, resource, resourceExtend);
+            System.out.println(JSONObject.toJSONString(resource));
         });
 
         return null;
     }
 
 
-    private static void Crawler(WebClient webClient, JSONObject webConf, JSONObject startJson, Map<String, String> pages){
+    private static void Crawler(WebClient webClient, JSONObject webConf, JSONObject startJson,
+                                Map<String, String> pages, Resource resource, ResourceExtend resourceExtend){
         try {
             String url = startJson.getString("url");
             HtmlPage startPage = webClient.getPage(url);
@@ -82,28 +93,54 @@ public class CrawlerServiceImpl implements CrawlerService {
                         ",");
 
                 childElements.stream().forEach(childEle -> {
+                    String tempText = childJson.getString("text");
+                    if("true".equals(tempText)) {
+                        String elementText = JsoupUtils.getElementText(childEle);
+                        System.out.println(elementText);
+                        setText(childName, elementText, resource);
+                        return;
+                    }
+                    String isProperty = childJson.getString("isProperty");
                     String tempAttribute = childJson.getString("Arrtibute");
                     if (StringUtils.isEmpty(tempAttribute)) {
                         return;
                     }
-                    String tempText = childJson.getString("text");
-                    if("true".equals(tempText)) {
-                        System.out.println(JsoupUtils.getElementText(childEle));
-                    }
                     String attribute = JsoupUtils.getElementAttributes(childEle, tempAttribute);
+                    if("Image".equals(childName)) {
+                        resource.setScreenshots(new String[]{attribute});
+                        System.out.println(attribute);
+                        return;
+                    }
                     pages.put(childName, attribute);
                     StringBuffer childPage = new StringBuffer("");
                     for (int p = 0; p < childpages.length; p++) {
                         String tempUrl = cancelSlash(pages.get(childpages[p]));
                         childPage.append("/" + tempUrl);
                     }
+                    if("List".equals(childName)) {
+                        resourceExtend.setResOriginUrl(childPage.substring(1, childPage.length()));
+                    }
                     childJson.put("url",childPage.substring(1, childPage.length()));
-                    Crawler(webClient,webConf, childJson, pages);
+                    Crawler(webClient,webConf, childJson, pages, resource, resourceExtend);
                 });
             }
         }catch (IOException io) {
 //            //todo 增加批次号
 //            logger.info("爬取Java1234主页失败: " + io.getMessage());
+        }
+    }
+
+    private static void setText(String childName, String elementText, Resource resource) {
+        switch (childName) {
+            case "Title":
+                resource.setName(elementText);
+                break;
+            case "Link":
+                resource.setResUrl(elementText);
+                break;
+            case "LinkPw":
+                resource.setResUrl(elementText);
+                break;
         }
     }
 
