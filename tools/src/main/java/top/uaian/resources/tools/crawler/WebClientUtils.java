@@ -2,6 +2,7 @@ package top.uaian.resources.tools.crawler;
 
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.WebClient;
+import top.uaian.resources.tools.crawler.conf.AdminJavaScriptEngine;
 
 public class WebClientUtils {
 
@@ -14,6 +15,7 @@ public class WebClientUtils {
         webClient.getOptions().setThrowExceptionOnScriptError(false);
         webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
         webClient.getOptions().setTimeout(10 * 1000);
+        webClient.setJavaScriptEngine(new AdminJavaScriptEngine(webClient));
         return webClient;
     }
 

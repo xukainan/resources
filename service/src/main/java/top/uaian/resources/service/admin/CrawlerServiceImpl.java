@@ -119,6 +119,7 @@ public class CrawlerServiceImpl implements CrawlerService {
                     }
                     if("List".equals(childName)) {
                         resourceExtend.setResOriginUrl(childPage.substring(1, childPage.length()));
+                        System.out.println(childPage.substring(1, childPage.length()));
                     }
                     childJson.put("url",childPage.substring(1, childPage.length()));
                     Crawler(webClient,webConf, childJson, pages, resource, resourceExtend);
@@ -136,10 +137,14 @@ public class CrawlerServiceImpl implements CrawlerService {
                 resource.setName(elementText);
                 break;
             case "Link":
-                resource.setResUrl(elementText);
+                if (elementText.startsWith("http")) {
+                    resource.setResUrl(elementText);
+                }
                 break;
             case "LinkPw":
-                resource.setResUrl(elementText);
+                if (elementText.length() == 4) {
+                    resource.setResPwd(elementText);
+                }
                 break;
         }
     }
