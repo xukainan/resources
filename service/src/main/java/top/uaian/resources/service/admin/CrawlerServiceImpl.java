@@ -20,9 +20,6 @@ import top.uaian.model.inner.crawler.ResourceExtend;
 import top.uaian.resources.tools.crawler.JsoupUtils;
 import top.uaian.resources.tools.crawler.WebClientUtils;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
 import java.util.logging.Level;
