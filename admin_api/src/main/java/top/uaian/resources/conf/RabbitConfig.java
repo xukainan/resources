@@ -1,4 +1,4 @@
-package top.uaian.resources.tools.crawler.conf;
+package top.uaian.resources.conf;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,8 +21,7 @@ import org.springframework.core.env.Environment;
  * version: 1.0 <br>
  */
 @Configuration
-public class RabbitConfig {
-
+public class RabbitConfig{
     //定义读取配置文件环境变量的实例
     @Autowired
     private Environment environment;

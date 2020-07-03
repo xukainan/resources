@@ -47,10 +47,10 @@ public class BasicPublisher {
             try {
                 rabbitTemplate.setMessageConverter(new Jackson2JsonMessageConverter());
                 rabbitTemplate.setExchange(environment.getProperty("mq.basic.info.exchange.name"));
-//                rabbitTemplate.setRoutingKey(environment.getProperty("mq.basic.info.key.name"));
+                rabbitTemplate.setRoutingKey(environment.getProperty("mq.basic.info.key.name"));
                 //将字符串转换为二进制
                 Message msg = MessageBuilder.withBody(message.getBytes("utf-8")).build();
-                rabbitTemplate.convertAndSend(environment.getProperty("mq.basic.info.key.name"), msg);
+                rabbitTemplate.convertAndSend(msg);
                 logger.info("发送消息：{}", message);
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();

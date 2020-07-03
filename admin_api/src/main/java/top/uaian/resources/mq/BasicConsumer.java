@@ -28,6 +28,7 @@ public class BasicConsumer {
     @RabbitListener(queues = "${mq.basic.info.queue.name}", containerFactory = "simpleListenerContainer")
     public void consumeMsg(@Payload byte[] msg) {
         try {
+            System.out.println(msg);
             String message = new String(msg, "utf-8");
             logger.info("消费消息：{}", message);
         } catch (UnsupportedEncodingException e) {
