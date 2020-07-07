@@ -5,9 +5,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageBuilder;
+import org.springframework.amqp.core.MessageDeliveryMode;
+import org.springframework.amqp.core.MessageProperties;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
@@ -25,7 +28,7 @@ import java.io.UnsupportedEncodingException;
  * version: 1.0 <br>
  */
 @Component
-@Controller
+//@Controller
 public class BasicPublisher {
 
      private Logger logger = LoggerFactory.getLogger(BasicPublisher.class);
@@ -35,13 +38,14 @@ public class BasicPublisher {
     private ObjectMapper objectMapper;
 
     @Autowired
+    @Qualifier("rabbitTemplate")
     private RabbitTemplate rabbitTemplate;
 
     @Autowired
     private Environment environment;
 
-    @GetMapping("/sendMsg")
-    @ResponseBody
+//    @GetMapping("/sendMsg")
+//    @ResponseBody
     public void sendMsg(@RequestParam("msg") String message){
         if(!StringUtils.isEmpty(message)) {
             try {
@@ -49,7 +53,9 @@ public class BasicPublisher {
                 rabbitTemplate.setExchange(environment.getProperty("mq.basic.info.exchange.name"));
                 rabbitTemplate.setRoutingKey(environment.getProperty("mq.basic.info.key.name"));
                 //将字符串转换为二进制
-                Message msg = MessageBuilder.withBody(message.getBytes("utf-8")).build();
+                Message msg = MessageBuilder.withBody(message.getBytes("utf-8"))
+                        .setContentType(MessageProperties.CONTENT_TYPE_JSON)
+                        .setDeliveryMode(MessageDeliveryMode.PERSISTENT).build();
                 rabbitTemplate.convertAndSend(msg);
                 logger.info("发送消息：{}", message);
             } catch (UnsupportedEncodingException e) {

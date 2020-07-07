@@ -114,5 +114,4 @@ public class RabbitConfig{
                 ".key.name"));
     }
 
-
 }
